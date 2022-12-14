@@ -10,25 +10,11 @@ import java.util.List;
 import jakarta.xml.bind.*;
 
 public class Main {
-    final static String theFilePath = "test.xml";
-
-    private static void listToFile(ArrayList<Student> students) throws JAXBException, FileNotFoundException {
-        JAXBContext context = JAXBContext.newInstance(Student.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        for (Student student : students) {
-            marshaller.marshal(student, new FileOutputStream(theFilePath));
-        }
-    }
-
-    private static void fileToList(ArrayList<Student> students) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(Student.class);
-
-    }
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
+        final String fileName=args[0];
         FileManipulator fileManipulator = new FileManipulator();
-        fileManipulator.commands(theFilePath);
+        fileManipulator.commands(fileName);
 
         JAXBContext contextObj = JAXBContext.newInstance(StudentGroup.class);
 
@@ -45,7 +31,7 @@ public class Main {
 
         StudentGroup studentGroup=new StudentGroup(list);
 
-        marshallerObj.marshal(studentGroup, System.out);
+        marshallerObj.marshal(studentGroup, new FileOutputStream(fileName));
 
     }
 }
