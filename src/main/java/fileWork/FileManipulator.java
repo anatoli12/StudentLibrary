@@ -1,13 +1,21 @@
 package fileWork;
 
+import collections.StudentGroup;
+import jakarta.xml.bind.JAXBException;
+
 import java.io.*;
 import java.util.Scanner;
 
 public class FileManipulator {
+    private String pathName;
     private boolean isOpen = false;
     private boolean closeOrSave = false;
 
-    public void commands(String pathName) {
+
+    public FileManipulator(String pathName) {
+        this.pathName = pathName;
+    }
+    public void commands() {
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -25,28 +33,28 @@ public class FileManipulator {
         switch (choice) {
             case "1":
                 try {
-                    open(pathName);
+                    open();
                 } catch (IOException e) {
                     System.out.println(e);
                 }
                 break;
             case "2":
                 try {
-                    close(pathName);
+                    close();
                 } catch (IOException e) {
                     System.out.println(e);
                 }
                 break;
             case "3":
-                save(pathName);
+                save();
                 break;
             case "4":
-                saveAs(pathName);
+                saveAs();
                 break;
             case "5":
                 help();
                 if (choice.equals("5")) {
-                    commands(pathName);
+                    commands();
                 }
                 break;
             case "6":
@@ -57,7 +65,7 @@ public class FileManipulator {
     }
 
 
-    private void open(String pathName) throws IOException {
+    private void open() throws IOException {
 
         File file = new File(pathName);
         if (file.exists()) {
@@ -70,7 +78,7 @@ public class FileManipulator {
 
     }
 
-    private void close(String pathName) throws IOException {
+    private void close() throws IOException {
         if (isOpen) {
 
             System.out.println("Successfully closed " + pathName);
@@ -81,7 +89,7 @@ public class FileManipulator {
         }
     }
 
-    private void save(String pathName) {
+    private void save(){
         if (isOpen) {
             closeOrSave = true;
             System.out.println("Successfully saved " + pathName);
@@ -90,7 +98,7 @@ public class FileManipulator {
         }
     }
 
-    private void saveAs(String pathName) {
+    private void saveAs(){
         if (isOpen) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("File Name");
@@ -98,8 +106,7 @@ public class FileManipulator {
             String newFileName = scanner.nextLine();
             closeOrSave = true;
             File file = new File(pathName);
-            File file1 = new File("C:/xmlFiles/" + newFileName);
-
+            File file1 = new File(newFileName);
             boolean bool = file.renameTo(file1);
             if (bool) {
                 System.out.println("Successfully saved another " + newFileName);
@@ -143,4 +150,11 @@ public class FileManipulator {
         this.closeOrSave = closeOrSave;
     }
 
+    public String getPathName() {
+        return pathName;
+    }
+
+    public void setPathName(String pathName) {
+        this.pathName = pathName;
+    }
 }

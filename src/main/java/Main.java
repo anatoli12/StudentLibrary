@@ -5,6 +5,7 @@ import fileWork.SaveToXml;
 import studentThings.Student;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,8 @@ public class Main {
     public static void main(String[] args) throws JAXBException{
         //opening a file
         final String fileName=args[0];
-        FileManipulator fileManipulator = new FileManipulator();
-        fileManipulator.commands(fileName);
+        FileManipulator fm = new FileManipulator(fileName);
+        fm.commands();
 //making a student list
         List<Student> list = new ArrayList<>();
         list.add(new Student("20621662", "SIT", 2, "Anatoli Dimov"));
@@ -28,7 +29,14 @@ public class Main {
 //student group
 //        StudentGroup studentGroup=new StudentGroup(list);
 //        SaveToXml.execute(studentGroup, fileName);
-            StudentGroup studentGroup= ReadFromXml.execute(fileName);
+        StudentGroup studentGroup = new StudentGroup();
+            if(fm.isOpen())studentGroup= ReadFromXml.execute(fm);
+            studentGroup.enroll(new Student("45624864", "KST", 5, "Goran Aleksandrov"));
+            try {
+                SaveToXml.execute(studentGroup, fm);
+            }catch (FileNotFoundException e){
+                e.printStackTrace();
+            }
         for (Student st:studentGroup.getStudents()) {
             System.out.println(st);
         }
