@@ -3,29 +3,24 @@ package studentThings;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement(name = "Student")
-@XmlType(propOrder = {"name", "program", "status", "year", "group", "gradeList"})
+//@XmlType(propOrder = {"name", "program", "status", "year", "group", "gradeList"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Student implements Serializable {
-        @XmlElement(name = "name")
-    private String name;
-        @XmlAttribute
+    //        @XmlElement(name = "name")
+    @XmlAttribute
     private String facNum;
-        @XmlElement(name = "year")
-    private int year;
-        @XmlElement(name = "program")
+    private String name;
     private String program;
-        @XmlElement(name = "group")
-    private int group;
-        @XmlElement(name ="gradeList")
-    private ArrayList<Discipline> gradeList;
-        @XmlElement(name = "status")
     private StudentStatus status;
-    public Student(){}
+    private int year;
+    private int group;
+    private ArrayList<Exam> examList;
+
+    public Student() {
+    }
 
     public Student(String facNum, String program, int group, String name) {
         super();
@@ -49,8 +44,8 @@ public class Student implements Serializable {
         return group;
     }
 
-    protected ArrayList<Discipline> getGradeList() {
-        return gradeList;
+    protected ArrayList<Exam> getGradeList() {
+        return examList;
     }
 
     public int getYear() {
@@ -75,15 +70,15 @@ public class Student implements Serializable {
 
     public double getAverageGrade() {
         double avg = 0;
-        for (Discipline disc : gradeList) {
+        for (Exam disc : examList) {
             avg += disc.getGrade();
         }
-        avg /= gradeList.size();
+        avg /= examList.size();
         return avg;
     }
 
-    @Override
-    public String toString() {
+    //@Override
+    public String toStringFirst() {
         return "Student{" +
                 "\nname='" + name + '\'' +
                 "\nfacNum='" + facNum + '\'' +
@@ -91,7 +86,20 @@ public class Student implements Serializable {
                 "\nyear=" + year +
                 "\nprogram='" + program + '\'' +
                 "\ngroup=" + group +
-                "\ngradeList=" + gradeList +
+                "\ngradeList=" + examList +
                 "\n}";
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", facNum='" + facNum + '\'' +
+                ", year=" + year +
+                ", program='" + program + '\'' +
+                ", group=" + group +
+                ", gradeList=" + examList +
+                ", status=" + status +
+                "}\n";
     }
 }

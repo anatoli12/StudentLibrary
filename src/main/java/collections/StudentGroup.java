@@ -10,17 +10,23 @@ import java.util.List;
 
 @XmlRootElement
 public final class StudentGroup {
+    private static StudentGroup gr;
     private List<Student> students= new ArrayList<>();
     private static final String message="This is a student group!";
 
-    public StudentGroup() {
+//    public StudentGroup() {
+//    }
+//
+//    public StudentGroup(List<Student> students) {
+//        super();
+//        this.students = students;
+//    }
+    private StudentGroup(){}
+    public static StudentGroup getInstance(){
+        if(gr==null)
+            gr=new StudentGroup();
+        return gr;
     }
-
-    public StudentGroup(List<Student> students) {
-        super();
-        this.students = students;
-    }
-
     @XmlElement(name = "student")
     public List<Student> getStudents() {
         return students;
@@ -35,4 +41,11 @@ public final class StudentGroup {
     }
 
     public void enroll(Student student){students.add(student);}
+
+    @Override
+    public String toString() {
+        return "StudentGroup{" +
+                "students=" + students +
+                "}";
+    }
 }

@@ -15,6 +15,7 @@ public class FileManipulator {
     public FileManipulator(String pathName) {
         this.pathName = pathName;
     }
+
     public void commands() {
         Scanner scanner = new Scanner(System.in);
         String choice;
@@ -89,7 +90,7 @@ public class FileManipulator {
         }
     }
 
-    private void save(){
+    private void save() {
         if (isOpen) {
             closeOrSave = true;
             System.out.println("Successfully saved " + pathName);
@@ -98,7 +99,7 @@ public class FileManipulator {
         }
     }
 
-    private void saveAs(){
+    private void saveAs() {
         if (isOpen) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("File Name");

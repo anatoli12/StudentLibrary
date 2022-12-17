@@ -1,17 +1,11 @@
 package studentThings;
 
-public class Discipline {
-    private String name;
+import collections.Discipline;
+
+public class Exam {
+    private Discipline discipline;
     private Boolean isGraded = false;
     private double grade = 2.00;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Boolean getGraded() {
         return isGraded;
@@ -27,5 +21,13 @@ public class Discipline {
 
     public void setGrade(double grade) {
         this.grade = grade;
+    }
+
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
     }
 }
