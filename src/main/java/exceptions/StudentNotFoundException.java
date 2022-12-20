@@ -1,8 +1,7 @@
 package exceptions;
 
 public class StudentNotFoundException extends Exception{
-
-    public StudentNotFoundException(String s) {
-        super(s);
+    public StudentNotFoundException(){
+        System.out.println("Student not found!");
     }
 }

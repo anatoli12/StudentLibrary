@@ -9,10 +9,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class SaveToXml {
-    public static void execute(StudentGroup studentGroup, FileManipulator fm) throws JAXBException, FileNotFoundException {
+    public static void execute(StudentGroup studentGroup, String path) throws JAXBException, FileNotFoundException {
         JAXBContext contextObj = JAXBContext.newInstance(StudentGroup.class);
         Marshaller marshallerObj = contextObj.createMarshaller();
         marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshallerObj.marshal(studentGroup, new FileOutputStream(fm.getPathName()));
+        marshallerObj.marshal(studentGroup, new FileOutputStream(path));
     }
 }

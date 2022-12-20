@@ -1,9 +1,11 @@
 package studentThings;
 
+import collections.Discipline;
+import jakarta.xml.bind.annotation.*;
+import programs.Program;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement(name = "Student")
 //@XmlType(propOrder = {"name", "program", "status", "year", "group", "gradeList"})
@@ -13,16 +15,17 @@ public class Student implements Serializable {
     @XmlAttribute
     private String facNum;
     private String name;
-    private String program;
+    private Program program;
     private StudentStatus status;
     private int year;
     private int group;
-    private ArrayList<Exam> examList;
+    @XmlElement(name = "course")
+    private ArrayList<Course> courseList= new ArrayList<>();
 
     public Student() {
     }
 
-    public Student(String facNum, String program, int group, String name) {
+    public Student(String facNum, Program program, int group, String name) {
         super();
         this.name = name;
         this.facNum = facNum;
@@ -35,8 +38,7 @@ public class Student implements Serializable {
     public String getName() {
         return name;
     }
-
-    public String getProgram() {
+    public Program getProgram() {
         return program;
     }
 
@@ -44,16 +46,24 @@ public class Student implements Serializable {
         return group;
     }
 
-    protected ArrayList<Exam> getGradeList() {
-        return examList;
+    protected ArrayList<Course> getGradeList() {
+        return courseList;
     }
 
     public int getYear() {
         return year;
     }
 
-    protected void setYear(int year) {
+    public void setYear(int year) {
         this.year = year;
+    }
+
+    public void setProgram(Program program) {
+        this.program = program;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
     }
 
     public String getFacNum() {
@@ -64,42 +74,50 @@ public class Student implements Serializable {
         return status;
     }
 
-    protected void setStatus(StudentStatus status) {
+    public void setStatus(StudentStatus status) {
         this.status = status;
     }
-
-    public double getAverageGrade() {
-        double avg = 0;
-        for (Exam disc : examList) {
-            avg += disc.getGrade();
-        }
-        avg /= examList.size();
-        return avg;
-    }
-
-    //@Override
-    public String toStringFirst() {
-        return "Student{" +
-                "\nname='" + name + '\'' +
-                "\nfacNum='" + facNum + '\'' +
-                "\nstatus='" + status + '\'' +
-                "\nyear=" + year +
-                "\nprogram='" + program + '\'' +
-                "\ngroup=" + group +
-                "\ngradeList=" + examList +
-                "\n}";
-    }
-
     @Override
     public String toString() {
         return "Student{" +
-                "name='" + name + '\'' +
-                ", facNum='" + facNum + '\'' +
-                ", year=" + year +
-                ", program='" + program + '\'' +
-                ", group=" + group +
-                ", gradeList=" + examList +
-                ", status=" + status +
+                "name='" + name + '\n' +
+                ", facNum='" + facNum + '\n' +
+                ", year=" + year + '\n' +
+                ", program='" + program + '\n' +
+                ", group=" + group + '\n' +
+                ", courseList=" + courseList + '\n'+
+                ", status=" + status + '\n'+
                 "}\n";
+    }
+    public double getAverageGrade() {
+        double avg = 0;
+        for (Course disc : courseList) {
+            avg += disc.getGrade();
+        }
+        avg /= courseList.size();
+        return avg;
+    }
+    public void advance(){
+        year+=1;
+    }
+    public void enrollIn(Discipline discipline){
+        if(program.getDisciplines().contains(discipline)&&
+        discipline.getYear()==year) {
+            Course course = new Course(discipline);
+            courseList.add(course);
+            System.out.println("Successfully added "+discipline);
+        } else throw new IllegalArgumentException("The student's program does not allow this discipline!");
+    }
+    public void addGrade(Discipline disc, double newGrade){
+        boolean fl=false;
+        for (Course course:courseList) {
+            if(disc.getTag().equals(course.getDiscipline().getTag())){
+                course.setGrade(newGrade);
+                fl=true;
+                System.out.println("New grade successfully set!");
+                break;
+            }
+        }
+        if(!fl)throw new IllegalArgumentException("Course is not enrolled!");
     }
 }

@@ -5,12 +5,14 @@ import jakarta.xml.bind.JAXBException;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.lang.System.exit;
 
 public class FileManipulator {
     private String pathName;
     private boolean isOpen = false;
-    private boolean closeOrSave = false;
-
 
     public FileManipulator(String pathName) {
         this.pathName = pathName;
@@ -19,103 +21,96 @@ public class FileManipulator {
     public void commands() {
         Scanner scanner = new Scanner(System.in);
         String choice;
-
-        System.out.println("*****MENU*****");
-        System.out.println("1-> Open");
-        System.out.println("2-> Close");
-        System.out.println("3-> Save");
-        System.out.println("4-> Save as");
-        System.out.println("5-> Help");
-        System.out.println("6-> Exit");
+        Pattern save_asPattern = Pattern.compile("saveas\\s+(.+)");
+        System.out.println("*****OPTIONS*****");
+        System.out.println("open");
+        System.out.println("close");
+        System.out.println("save");
+        System.out.println("save as");
+        System.out.println("help");
+        System.out.println("exit");
         System.out.println("**************");
         System.out.print("Enter your choice: ");
         choice = scanner.nextLine();
-
-        switch (choice) {
-            case "1":
-                try {
-                    open();
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-                break;
-            case "2":
-                try {
-                    close();
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-                break;
-            case "3":
-                save();
-                break;
-            case "4":
-                saveAs();
-                break;
-            case "5":
-                help();
-                if (choice.equals("5")) {
-                    commands();
-                }
-                break;
-            case "6":
-                System.exit(0);
-                break;
-
-        }
+        choice = choice.strip();
+        Matcher m = save_asPattern.matcher(choice);
+        if (m.matches()) {
+            try {
+                saveAs(m.group(1));
+            } catch (FileNotFoundException | JAXBException e) {
+                throw new RuntimeException(e);
+            }
+        } else
+            switch (choice) {
+                case "open":
+                    try {
+                        StudentGroup.setGr(open());
+                        isOpen = true;
+                    } catch (JAXBException | IOException e) {
+                        System.out.println("Nothing to read");
+                    }
+                    break;
+                case "close":
+                    try {
+                        close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case "save":
+                    try {
+                        save();
+                    } catch (FileNotFoundException | JAXBException e) {
+                        throw new RuntimeException(e);
+                    } break;
+                case "help":
+                    help();
+                    break;
+                case "exit":
+                    exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid command!");
+            }
     }
 
-
-    private void open() throws IOException {
-
+    private StudentGroup open() throws IOException, JAXBException {
         File file = new File(pathName);
         if (file.exists()) {
             isOpen = true;
             System.out.println("Successfully opened " + pathName);
+            return ReadFromXml.execute(pathName);
         } else {
             isOpen = file.createNewFile();
             System.out.println("Successfully created " + pathName);
+            return StudentGroup.getInstance();
         }
 
     }
 
     private void close() throws IOException {
         if (isOpen) {
-
             System.out.println("Successfully closed " + pathName);
-            closeOrSave = false;
             isOpen = false;
+            StudentGroup.destroy();
         } else {
             System.out.println("The file is not open");
         }
     }
 
-    private void save() {
+    private void save() throws JAXBException, FileNotFoundException {
         if (isOpen) {
-            closeOrSave = true;
+            SaveToXml.execute(StudentGroup.getInstance(), pathName);
             System.out.println("Successfully saved " + pathName);
         } else {
             System.out.println("The file is not open");
         }
     }
 
-    private void saveAs() {
+    private void saveAs(String saveAsLocation) throws JAXBException, FileNotFoundException {
         if (isOpen) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("File Name");
-            System.out.print("Change path: ");
-            String newFileName = scanner.nextLine();
-            closeOrSave = true;
-            File file = new File(pathName);
-            File file1 = new File(newFileName);
-            boolean bool = file.renameTo(file1);
-            if (bool) {
-                System.out.println("Successfully saved another " + newFileName);
-            } else {
-                System.out.println("Unable to move the file ........");
-            }
-
-
+            SaveToXml.execute(StudentGroup.getInstance(), saveAsLocation);
+            System.out.println("Successfully saved to " + saveAsLocation);
         } else {
             System.out.println("The file is not open");
         }
@@ -124,7 +119,7 @@ public class FileManipulator {
     private void help() {
         System.out.println("> help \n" +
                 "The following commands are supported: \n" +
-                "open <file> opens <file> \n" +
+                "open opens the file <args[0]>\n" +
                 "close closes currently opened file \n" +
                 "save saves the currently open file \n" +
                 "save as <file> saves the currently open file in <file> \n" +
@@ -137,25 +132,5 @@ public class FileManipulator {
 
     public boolean isOpen() {
         return isOpen;
-    }
-
-    public void setOpen(boolean open) {
-        this.isOpen = open;
-    }
-
-    public boolean isCloseOrSave() {
-        return closeOrSave;
-    }
-
-    public void setCloseOrSave(boolean closeOrSave) {
-        this.closeOrSave = closeOrSave;
-    }
-
-    public String getPathName() {
-        return pathName;
-    }
-
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
     }
 }
