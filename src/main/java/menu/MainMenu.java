@@ -1,5 +1,7 @@
 package menu;
 
+import menu.commands.*;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -35,55 +37,55 @@ public class MainMenu {
             }
             switch (i) {
                 case 0: //enroll
-                    MenuCommands.enroll(m);
+                    new Enroll().execute(m);
                     break;
                 case 1: //advance
-                    MenuCommands.advance(m);
+                    new Advance().execute(m);
                     break;
                 case 2: //change group
                     try {
-                        MenuCommands.changeGroup(m);
+                        new ChangeGroup().execute(m);
                     } catch (IllegalArgumentException e){
                         System.out.println(e);
                     }
                     break;
                 case 3: //change program
                     try {
-                        MenuCommands.changeProgram(m);
+                        new ChangeProgram().execute(m);
                     } catch (IllegalArgumentException e){
                         System.out.println(e);
                     }
                     break;
                 case 4: //change year
                     try {
-                        MenuCommands.changeYear(m);
+                        new ChangeYear().execute(m);
                     } catch (IllegalArgumentException e){
                         System.out.println(e);
                     }
                     break;
                 case 5: //graduate
-//                    MenuCommands.
+//                        new Graduate
                     break;
                 case 6: //interrupt
-                    MenuCommands.interrupt(m);
+                    new Interrupt().execute(m);
                     break;
                 case 7: // resume
-                    MenuCommands.resume(m);
+                    new Resume().execute(m);
                     break;
                 case 8: //print
-                    MenuCommands.print(m);
+                    new Print().execute(m);
                     break;
                 case 9: //printall
-                    MenuCommands.printAll(m);
+                    new PrintAll().execute(m);
                     break;
                 case 10: //enrollin
-                    MenuCommands.enrollIn(m);
+                    new EnrollIn().execute(m);
                     break;
                 case 11: //addgrade
-                    MenuCommands.addGrade(m);
+                    new AddGrade().execute(m);
                     break;
                 case 12:
-                    MenuCommands.protocol(m);
+//                    new Protocol
                     break;
                 case 14: //files
                     break loop;

@@ -11,7 +11,6 @@ import java.util.List;
 public final class StudentGroup {
     private static StudentGroup gr;
     private List<Student> students = new ArrayList<>();
-    private static final String message = "This is a student group!";
 
     private StudentGroup() {
     }
@@ -33,10 +32,6 @@ public final class StudentGroup {
 
     public void setStudents(List<Student> students) {
         this.students = students;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public void enroll(Student student) {

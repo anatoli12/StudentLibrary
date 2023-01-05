@@ -8,10 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 @XmlRootElement(name = "Student")
-//@XmlType(propOrder = {"name", "program", "status", "year", "group", "gradeList"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Student implements Serializable {
-    //        @XmlElement(name = "name")
     @XmlAttribute
     private String facNum;
     private String name;
@@ -109,15 +107,13 @@ public class Student implements Serializable {
         } else throw new IllegalArgumentException("The student's program does not allow this discipline!");
     }
     public void addGrade(Discipline disc, double newGrade){
-        boolean fl=false;
         for (Course course:courseList) {
             if(disc.getTag().equals(course.getDiscipline().getTag())){
                 course.setGrade(newGrade);
-                fl=true;
                 System.out.println("New grade successfully set!");
-                break;
+                return;
             }
         }
-        if(!fl)throw new IllegalArgumentException("Course is not enrolled!");
+        throw new IllegalArgumentException("Course is not enrolled!");
     }
 }

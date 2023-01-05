@@ -9,12 +9,14 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Course {
     private Discipline discipline;
-    private boolean isGraded = false;
-    private double grade = 2.00;
+    private boolean isGraded;
+    private double grade;
     private boolean isEnrolled;
 
     public Course(Discipline discipline) {
         this.discipline = discipline;
+        this.grade = 2.00;
+        this.isGraded=false;
         isEnrolled=true;
     }
     public Course(){}
